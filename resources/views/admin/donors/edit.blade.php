@@ -4,8 +4,8 @@
         <!-- breadcrumb -->
         <x-bread-crumb :breads="[
             ['url' => url('/admin'), 'title' => 'لوحة التحكم', 'isactive' => false],
-            ['url' => route('admin.admins.index'), 'title' => 'المستخدمين', 'isactive' => false],
-            ['url' => route('admin.admins.show', $admin->id), 'title' => $admin->user->name, 'isactive' => false],
+            ['url' => route('admin.donors.index'), 'title' => 'المتبرعين', 'isactive' => false],
+            ['url' => route('admin.donors.show', $donor->id), 'title' => $donor->user->name, 'isactive' => false],
             ['url' => '#', 'title' => 'تعديل', 'isactive' => true],
         ]">
         </x-bread-crumb>
@@ -14,13 +14,13 @@
 
 
             <form id="validate-form" class="row" enctype="multipart/form-data" method="POST"
-                action="{{ route('admin.admins.update', $admin) }}">
+                action="{{ route('admin.donors.update', $donor) }}">
                 @csrf
                 @method('PUT')
                 <div class="col-12 col-lg-8 p-0 main-box">
                     <div class="col-12 px-0">
                         <div class="col-12 px-3 py-3">
-                            <span class="fas fa-info-circle"></span> تعديل المستخدم
+                            <span class="fas fa-info-circle"></span> تعديل المتبرع
                         </div>
                         <div class="col-12 divider" style="min-height: 2px;"></div>
                     </div>
@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-12 pt-3">
                                 <input type="text" name="name" required minlength="3" maxlength="190"
-                                    class="form-control" value="{{ $admin->user->name }}">
+                                    class="form-control" value="{{ $donor->user->name }}">
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 p-2">
@@ -41,7 +41,7 @@
                                 البريد
                             </div>
                             <div class="col-12 pt-3">
-                                <input type="email" name="email" class="form-control" value="{{ $admin->email }}">
+                                <input type="email" name="email" class="form-control" value="{{ $donor->email }}">
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 p-2">
@@ -61,7 +61,7 @@
                                 <input type="file" name="avatar" class="form-control" accept="image/*">
                             </div>
                             <div class="col-12 p-0">
-                                <img src="{{ $admin->user->getUserAvatar() }}" style="width:100px;margin-top:20px">
+                                <img src="{{ $donor->user->getUserAvatar() }}" style="width:100px;margin-top:20px">
                             </div>
                         </div>
 
@@ -71,7 +71,7 @@
                             </div>
                             <div class="col-12 pt-3">
                                 <input type="text" name="phone" maxlength="190" class="form-control"
-                                    value="{{ $admin->user->phone }}">
+                                    value="{{ $donor->user->phone }}">
                             </div>
                         </div>
                         @if (auth()->user()->can('user-roles-update'))
@@ -83,7 +83,7 @@
                                     <select class="form-control select2-select" name="roles[]" multiple required>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}"
-                                                @if ($admin->hasRole($role->name)) selected @endif>{{ $role->display_name }}
+                                                @if ($donor->hasRole($role->name)) selected @endif>{{ $role->display_name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -95,7 +95,7 @@
                                 نبذة
                             </div>
                             <div class="col-12 pt-3">
-                                <textarea name="bio" maxlength="5000" class="form-control" style="min-height:150px">{{ $admin->user->bio }}</textarea>
+                                <textarea name="bio" maxlength="5000" class="form-control" style="min-height:150px">{{ $donor->user->bio }}</textarea>
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 p-2">
@@ -104,8 +104,8 @@
                             </div>
                             <div class="col-12 pt-3">
                                 <select class="form-control" name="blocked">
-                                    <option @if ($admin->user->blocked == '0') selected @endif value="0">لا</option>
-                                    <option @if ($admin->user->blocked == '1') selected @endif value="1">نعم</option>
+                                    <option @if ($donor->user->blocked == '0') selected @endif value="0">لا</option>
+                                    <option @if ($donor->user->blocked == '1') selected @endif value="1">نعم</option>
                                 </select>
                             </div>
                         </div>

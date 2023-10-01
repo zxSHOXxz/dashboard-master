@@ -8,13 +8,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\Image\Manipulations;
 
-class Admin extends Authenticatable
+class Admin extends Authenticatable implements HasMedia
 {
     use HasRoles;
     use HasFactory;
     use Notifiable;
     use InteractsWithMedia;
+
 
     public function user()
     {
@@ -54,5 +58,4 @@ class Admin extends Authenticatable
             ->format(Manipulations::FORMAT_WEBP)
             ->nonQueued();
     }
-    
 }

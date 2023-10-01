@@ -42,7 +42,7 @@ Route::get('/index2', function () {
 
 
 
-Route::prefix('dashboard')->middleware(['auth:web,client', 'ActiveAccount', 'verified'])->name('user.')->group(function () {
+Route::prefix('dashboard')->middleware(['auth:admin,donor', 'ActiveAccount', 'verified'])->name('user.')->group(function () {
     Route::get('/', [FrontendProfileController::class, 'dashboard'])->name('dashboard');
     Route::get('/support', [FrontendProfileController::class, 'support'])->name('support');
     Route::get('/support/create-ticket', [FrontendProfileController::class, 'create_ticket'])->name('create-ticket');
@@ -70,13 +70,9 @@ Route::prefix('admin')->middleware(['auth:admin,donor', 'ActiveAccount'])->name(
         Route::post('contacts/resolve', [BackendContactController::class, 'resolve']);
         Route::resource('contacts', BackendContactController::class);
         Route::resource('menus', BackendMenuController::class);
-        Route::get('users/{user}/access', [BackendUserController::class, 'access'])->name('users.access');
-        Route::resource('users', BackendUserController::class);
         Route::resource('roles', BackendRoleController::class);
         Route::get('user-roles/{user}', [BackendUserRoleController::class, 'index'])->name('users.roles.index');
         Route::put('user-roles/{user}', [BackendUserRoleController::class, 'update'])->name('users.roles.update');
-        Route::get('client-roles/{client}', [BackendUserRoleController::class, 'indexClient'])->name('clients.roles.index');
-        Route::put('client-roles/{client}', [BackendUserRoleController::class, 'updateClient'])->name('clients.roles.update');
         Route::resource('articles', BackendArticleController::class);
         Route::resource('pages', BackendPageController::class);
         Route::post('menu-links/get-type', [BackendMenuLinkController::class, 'getType'])->name('menu-links.get-type');
@@ -84,8 +80,18 @@ Route::prefix('admin')->middleware(['auth:admin,donor', 'ActiveAccount'])->name(
         Route::resource('menu-links', BackendMenuLinkController::class);
         Route::resource('redirections', BackendRedirectionController::class);
         Route::resource('admins', AdminController::class);
+        Route::get('admins/{admin}/access', [AdminController::class, 'access'])->name('admins.access');
+
         Route::resource('donors', DonorController::class);
+        Route::get('donors/{donor}/access', [DonorController::class, 'access'])->name('donors.access');
+
+
+
         Route::resource('donates', DonateController::class);
+        Route::get('index_donates/{donor}', [DonateController::class, 'donorDonates'])->name('donates.index.donor');
+
+
+
         Route::resource('programms', ProgramController::class);
         Route::get('traffics', [BackendTrafficsController::class, 'index'])->name('traffics.index');
         Route::get('traffics/logs', [BackendTrafficsController::class, 'logs'])->name('traffics.logs');

@@ -6,13 +6,13 @@
             <div class="col-12 px-0">
                 <div class="col-12 p-0 row">
                     <div class="col-12 col-lg-4 py-3 px-3">
-                        <span class="fas fa-pages"></span> الصفحات
+                        <span class="fas fa-donates"></span> المقالات
                     </div>
                     <div class="col-12 col-lg-4 p-0">
                     </div>
                     <div class="col-12 col-lg-4 p-2 text-lg-end">
-                        @can('pages-create')
-                            <a href="{{ route('admin.pages.create') }}">
+                        @can('donates-create')
+                            <a href="{{ route('admin.donates.create', $donor) }}">
                                 <span class="btn btn-primary"><span class="fas fa-plus"></span> إضافة جديد</span>
                             </a>
                         @endcan
@@ -38,40 +38,35 @@
                             <tr>
                                 <th>#</th>
                                 <th>المستخدم</th>
-                                <th>الرابط</th>
-                                <th>الشعار</th>
-                                <th>العنوان</th>
+                                <th>القيمة</th>
+                                <th>البرنامج</th>
                                 <th>تحكم</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($pages as $page)
+                            @foreach ($donates as $donate)
                                 <tr>
-                                    <td>{{ $page->id }}</td>
-                                    <td>{{ $page->user->name ?? null }}</td>
-                                    <td>{{ $page->slug }}</td>
-                                    <td><img src="{{ $page->image() }}" style="width:40px"></td>
-                                    <td>{{ $page->title }}</td>
-
-                                    <td style="width: 270px;">
-
-                                        @can('pages-read')
-                                            <a href="{{ route('page.show', ['page' => $page]) }}">
+                                    <td>{{ $donate->id }}</td>
+                                    <td>{{ $donate->donor->user->name }}</td>
+                                    <td>{{ $donate->value }}</td>
+                                    <td>{{ $donate->program->name }}</td>
+                                    <td style="width: 360px;">
+                                        @can('donates-read')
+                                            <a href="{{ route('admin.donates.show', ['donate' => $donate]) }}">
                                                 <span class="btn  btn-outline-primary btn-sm font-1 mx-1">
                                                     <span class="fas fa-search "></span> عرض
                                                 </span>
                                             </a>
                                         @endcan
-
-                                        @can('pages-update')
-                                            <a href="{{ route('admin.pages.edit', $page) }}">
+                                        @can('donates-update')
+                                            <a href="{{ route('admin.donates.edit', $donate) }}">
                                                 <span class="btn  btn-outline-success btn-sm font-1 mx-1">
                                                     <span class="fas fa-wrench "></span> تحكم
                                                 </span>
                                             </a>
                                         @endcan
-                                        @can('pages-delete')
-                                            <form method="POST" action="{{ route('admin.pages.destroy', $page) }}"
+                                        @can('donates-delete')
+                                            <form method="POST" action="{{ route('admin.donates.destroy', $donate) }}"
                                                 class="d-inline-block">@csrf @method('DELETE')
                                                 <button class="btn  btn-outline-danger btn-sm font-1 mx-1"
                                                     onclick="var result = confirm('هل أنت متأكد من عملية الحذف ؟');if(result){}else{event.preventDefault()}">
@@ -87,7 +82,7 @@
                 </div>
             </div>
             <div class="col-12 p-3">
-                {{ $pages->appends(request()->query())->render() }}
+                {{ $donates->appends(request()->query())->render() }}
             </div>
         </div>
     </div>

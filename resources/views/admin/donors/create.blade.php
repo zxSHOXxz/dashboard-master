@@ -4,9 +4,8 @@
         <!-- breadcrumb -->
         <x-bread-crumb :breads="[
             ['url' => url('/admin'), 'title' => 'لوحة التحكم', 'isactive' => false],
-            ['url' => route('admin.admins.index'), 'title' => 'المستخدمين', 'isactive' => false],
-            ['url' => route('admin.admins.show', $admin->id), 'title' => $admin->user->name, 'isactive' => false],
-            ['url' => '#', 'title' => 'تعديل', 'isactive' => true],
+            ['url' => route('admin.donors.index'), 'title' => 'المتبرعين', 'isactive' => false],
+            ['url' => '#', 'title' => 'اضافة متبرع', 'isactive' => true],
         ]">
         </x-bread-crumb>
         <!-- /breadcrumb -->
@@ -14,13 +13,13 @@
 
 
             <form id="validate-form" class="row" enctype="multipart/form-data" method="POST"
-                action="{{ route('admin.admins.update', $admin) }}">
+                action="{{ route('admin.donors.store') }}">
                 @csrf
-                @method('PUT')
+
                 <div class="col-12 col-lg-8 p-0 main-box">
                     <div class="col-12 px-0">
                         <div class="col-12 px-3 py-3">
-                            <span class="fas fa-info-circle"></span> تعديل المستخدم
+                            <span class="fas fa-info-circle"></span> إضافة متبرع
                         </div>
                         <div class="col-12 divider" style="min-height: 2px;"></div>
                     </div>
@@ -33,15 +32,16 @@
                             </div>
                             <div class="col-12 pt-3">
                                 <input type="text" name="name" required minlength="3" maxlength="190"
-                                    class="form-control" value="{{ $admin->user->name }}">
+                                    class="form-control" value="{{ old('name') }}">
                             </div>
                         </div>
+
                         <div class="col-12 col-lg-6 p-2">
                             <div class="col-12">
                                 البريد
                             </div>
                             <div class="col-12 pt-3">
-                                <input type="email" name="email" class="form-control" value="{{ $admin->email }}">
+                                <input type="email" name="email" class="form-control" value="{{ old('email') }}">
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 p-2">
@@ -49,7 +49,7 @@
                                 كلمة المرور
                             </div>
                             <div class="col-12 pt-3">
-                                <input type="password" name="password" class="form-control" minlength="8">
+                                <input type="password" name="password" class="form-control" required minlength="8">
                             </div>
                         </div>
 
@@ -61,7 +61,7 @@
                                 <input type="file" name="avatar" class="form-control" accept="image/*">
                             </div>
                             <div class="col-12 p-0">
-                                <img src="{{ $admin->user->getUserAvatar() }}" style="width:100px;margin-top:20px">
+
                             </div>
                         </div>
 
@@ -71,7 +71,7 @@
                             </div>
                             <div class="col-12 pt-3">
                                 <input type="text" name="phone" maxlength="190" class="form-control"
-                                    value="{{ $admin->user->phone }}">
+                                    value="{{ old('phone') }}">
                             </div>
                         </div>
                         @if (auth()->user()->can('user-roles-update'))
@@ -82,9 +82,7 @@
                                 <div class="col-12 pt-3">
                                     <select class="form-control select2-select" name="roles[]" multiple required>
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}"
-                                                @if ($admin->hasRole($role->name)) selected @endif>{{ $role->display_name }}
-                                            </option>
+                                            <option value="{{ $role->id }}">{{ $role->display_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -95,7 +93,7 @@
                                 نبذة
                             </div>
                             <div class="col-12 pt-3">
-                                <textarea name="bio" maxlength="5000" class="form-control" style="min-height:150px">{{ $admin->user->bio }}</textarea>
+                                <textarea name="bio" maxlength="5000" class="form-control" style="min-height:150px">{{ old('bio') }}</textarea>
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 p-2">
@@ -104,8 +102,8 @@
                             </div>
                             <div class="col-12 pt-3">
                                 <select class="form-control" name="blocked">
-                                    <option @if ($admin->user->blocked == '0') selected @endif value="0">لا</option>
-                                    <option @if ($admin->user->blocked == '1') selected @endif value="1">نعم</option>
+                                    <option @if (old('blocked') == '0') selected @endif value="0">لا</option>
+                                    <option @if (old('blocked') == '1') selected @endif value="1">نعم</option>
                                 </select>
                             </div>
                         </div>

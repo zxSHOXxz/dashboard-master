@@ -160,7 +160,10 @@ return [
     ],
 
     'roles_donor_structure' => [
-        'normal_donor' => [],
+        'normal_donor' => [
+            'programs' => 'c',
+            'donates' => 'c,r',
+        ],
     ],
     'roles_structure' => [
         'superadmin' => [

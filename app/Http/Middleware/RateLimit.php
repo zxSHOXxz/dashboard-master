@@ -19,7 +19,7 @@ class RateLimit
 
 
         if(auth()->check())
-            \App\Models\User::where('id',auth()->user()->id)->update(['last_activity'=>now()]);   
+            \App\Models\User::where('id',auth()->user()->id)->update(['last_activity'=>now()]);
         $rate_limit = \MainHelper::rate_limit_insert();
         return $next($request);
     }

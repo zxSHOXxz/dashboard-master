@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donate;
+use App\Models\Donor;
 use Illuminate\Http\Request;
 
 class DonateController extends Controller
@@ -14,17 +15,24 @@ class DonateController extends Controller
      */
     public function index()
     {
-        //
+        $donates = Donate::paginate();
+        return view('admin.donates.index', compact('donates'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function donorDonates(Donor $donor)
     {
-        //
+        $donates = Donate::where('donor_id', $donor->id)->paginate();
+        return view('admin.donates.indexDonorDonates', compact('donates', 'donor'));
+    }
+    /**
+     * Create a new donor.
+     *
+     * @param Donor $donor The donor object.
+     * @return View The view for creating a new donation with a list of programs.
+     */
+    public function create(Donor $donor)
+    {
+        $programs = \App\Models\Program::all();
+        return view('admin.donates.create', compact('programs'));
     }
 
     /**
@@ -35,7 +43,9 @@ class DonateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Donate::create($data);
+        return redirect()->route('admin.donates.index');
     }
 
     /**

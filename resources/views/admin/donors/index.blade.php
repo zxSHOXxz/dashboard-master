@@ -4,7 +4,7 @@
         <!-- breadcrumb -->
         <x-bread-crumb :breads="[
             ['url' => url('/admin'), 'title' => 'لوحة التحكم', 'isactive' => false],
-            ['url' => route('admin.admins.index'), 'title' => 'المشرفين', 'isactive' => true],
+            ['url' => route('admin.donors.index'), 'title' => 'المتبرعين', 'isactive' => true],
         ]">
         </x-bread-crumb>
         <!-- /breadcrumb -->
@@ -12,13 +12,13 @@
             <div class="col-12 px-0">
                 <div class="col-12 p-0 row">
                     <div class="col-12 col-lg-4 py-3 px-3">
-                        <span class="fas fa-users"></span> المشرفين
+                        <span class="fas fa-users"></span> المتبرعين
                     </div>
                     <div class="col-12 col-lg-4 p-0">
                     </div>
                     <div class="col-12 col-lg-4 p-2 text-lg-end">
-                        @can('admins-create')
-                            <a href="{{ route('admin.admins.create') }}">
+                        @can('donors-create')
+                            <a href="{{ route('admin.donors.create') }}">
                                 <span class="btn btn-primary"><span class="fas fa-plus"></span> إضافة جديد</span>
                             </a>
                         @endcan
@@ -46,56 +46,37 @@
                                 <th>نشط</th>
                                 <th>الاسم</th>
                                 <th>البريد</th>
-                                @if (auth()->user()->can('articles-read'))
-                                    <th>المقالات</th>
-                                @endif
-                                @if (auth()->user()->can('contacts-read'))
-                                    <th>التذاكر</th>
-                                @endif
+                                <th>الصلاحيات</th>
                                 @if (auth()->user()->can('traffics-read'))
                                     <th>الترافيك</th>
                                 @endif
-                                <th>الصلاحيات</th>
                                 <th>تحكم</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @foreach ($admins as $admin)
+                            @foreach ($donors as $donor)
                                 <tr>
-                                    <td>{{ $admin->id }}</td>
-                                    <td>{{ \Carbon::parse($admin->last_activity)->diffForHumans() }}</td>
-                                    <td>{{ $admin->user->name }}</td>
-                                    <td>{{ $admin->email }}</td>
-
-                                    @if (auth()->user()->can('articles-read'))
-                                        <td><a
-                                                href="{{ route('admin.articles.index', ['user_id' => $admin->user->id]) }}">{{ $admin->user->articles_count ?? null }}</a>
-                                        </td>
-                                    @endif
-                                    @if (auth()->user()->can('contacts-read'))
-                                        <td><a
-                                                href="{{ route('admin.contacts.index', ['user_id' => $admin->user->id]) }}">{{ $admin->user->contacts_count ?? null }}</a>
-                                        </td>
-                                    @endif
-                                    @if (auth()->user()->can('traffics-read'))
-                                        <td><a
-                                                href="{{ route('admin.traffics.logs', ['user_id' => $admin->user->id]) }}">{{ $admin->user->logs_count ?? null }}</a>
-                                        </td>
-                                    @endif
-
+                                    <td>{{ $donor->id }}</td>
+                                    <td>{{ \Carbon::parse($donor->last_activity)->diffForHumans() }}</td>
+                                    <td>{{ $donor->user->name }}</td>
+                                    <td>{{ $donor->email }}</td>
 
                                     <td>
-                                        @foreach ($admin->roles as $role)
+                                        @foreach ($donor->roles as $role)
                                             {{ $role->display_name }}
                                             <br>
                                         @endforeach
                                     </td>
-
+                                    @if (auth()->user()->can('traffics-read'))
+                                        <td><a
+                                                href="{{ route('admin.traffics.logs', ['user_id' => $donor->user->id]) }}">{{ $donor->user->logs_count }}</a>
+                                        </td>
+                                    @endif
 
                                     <td>
-                                        @can('admins-read')
-                                            <a href="{{ route('admin.admins.show', $admin) }}">
+                                        @can('donors-read')
+                                            <a href="{{ route('admin.donors.show', $donor) }}">
                                                 <span class="btn  btn-outline-primary btn-sm font-small mx-1">
                                                     <span class="fas fa-search "></span> عرض
                                                 </span>
@@ -106,12 +87,12 @@
 
 
                                         @can('notifications-create')
-                                            <a href="{{ route('admin.notifications.index', ['user_id' => $admin->id]) }}">
+                                            <a href="{{ route('admin.notifications.index', ['user_id' => $donor->id]) }}">
                                                 <span class="btn  btn-outline-primary btn-sm font-small mx-1">
                                                     <span class="far fa-bells"></span> الاشعارات
                                                 </span>
                                             </a>
-                                            <a href="{{ route('admin.notifications.create', ['user_id' => $admin->id]) }}">
+                                            <a href="{{ route('admin.notifications.create', ['user_id' => $donor->id]) }}">
                                                 <span class="btn  btn-outline-primary btn-sm font-small mx-1">
                                                     <span class="far fa-bell"></span>
                                                 </span>
@@ -119,15 +100,15 @@
                                         @endcan
 
                                         @can('user-roles-update')
-                                            <a href="{{ route('admin.users.roles.index', $admin) }}">
+                                            <a href="{{ route('admin.users.roles.index', $donor) }}">
                                                 <span class="btn btn-outline-primary btn-sm font-small mx-1">
                                                     <span class="fal fa-key "></span> الصلاحيات
                                                 </span>
                                             </a>
                                         @endcan
 
-                                        @can('admins-update')
-                                            <a href="{{ route('admin.admins.edit', $admin) }}">
+                                        @can('donors-update')
+                                            <a href="{{ route('admin.donors.edit', $donor) }}">
                                                 <span class="btn  btn-outline-success btn-sm font-small mx-1">
                                                     <span class="fas fa-wrench "></span> تحكم
                                                 </span>
@@ -135,8 +116,8 @@
                                         @endcan
 
 
-                                        @can('admins-delete')
-                                            <form method="POST" action="{{ route('admin.admins.destroy', $admin) }}"
+                                        @can('donors-delete')
+                                            <form method="POST" action="{{ route('admin.donors.destroy', $donor) }}"
                                                 class="d-inline-block">@csrf @method('DELETE')
                                                 <button class="btn  btn-outline-danger btn-sm font-small mx-1"
                                                     onclick="var result = confirm('هل أنت متأكد من عملية الحذف ؟');if(result){}else{event.preventDefault()}">
@@ -155,19 +136,19 @@
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
                                                 data-popper-placement="bottom-start"
                                                 style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(0px, 29px, 0px);">
-                                                @can('admins-update')
+                                                @can('donors-update')
                                                     <li><a class="dropdown-item font-1"
-                                                            href="{{ route('admin.admins.access', $admin) }}"><span
+                                                            href="{{ route('admin.donors.access', $donor) }}"><span
                                                                 class="fal fa-eye"></span> دخول</a></li>
                                                 @endcan
 
 
 
-                                                @can('admins-update')
+                                                @can('donors-update')
                                                     <li><a class="dropdown-item font-1"
-                                                            href="{{ route('admin.traffics.logs', ['user_id' => $admin->id]) }}"><span
+                                                            href="{{ route('admin.traffics.logs', ['user_id' => $donor->id]) }}"><span
                                                                 class="fal fa-boxes"></span> مراقبة النشاط <span
-                                                                class="badge bg-danger">{{ $admin->logs_count }}</span></a>
+                                                                class="badge bg-danger">{{ $donor->logs_count }}</span></a>
                                                     </li>
                                                 @endcan
                                             </ul>
@@ -182,7 +163,7 @@
                 </div>
             </div>
             <div class="col-12 p-3">
-                {{ $admins->appends(request()->query())->render() }}
+                {{ $donors->appends(request()->query())->render() }}
             </div>
         </div>
     </div>
