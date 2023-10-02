@@ -21,6 +21,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.7",
         "mews/purifier": "^3.3",
+        "nafezly/payments": "^2.7",
         "nesbot/carbon": "^2.54",
         "nwidart/laravel-modules": "^9.0",
         "spatie/laravel-medialibrary": "^10.0.0",

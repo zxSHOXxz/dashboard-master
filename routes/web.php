@@ -27,6 +27,7 @@ use App\Http\Controllers\DonorController;
 # Frontend Controllers
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\FrontendProfileController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProgramController;
 
 // Auth::routes();
@@ -59,6 +60,7 @@ Route::prefix('dashboard')->middleware(['auth:admin,donor', 'ActiveAccount', 've
 });
 
 
+Route::get('/payments/verify/{payment?}', [PaymentController::class, 'verifyWithPaytabs'])->name('verify-payment');
 
 #Route::get('/test',[BackendTestController::class,'test']);
 
@@ -81,6 +83,11 @@ Route::prefix('admin')->middleware(['auth:admin,donor', 'ActiveAccount'])->name(
         Route::resource('redirections', BackendRedirectionController::class);
         Route::resource('admins', AdminController::class);
         Route::get('admins/{admin}/access', [AdminController::class, 'access'])->name('admins.access');
+
+
+
+
+        Route::get('/payments/payWithPaytabs', [PaymentController::class, 'payWithPaytabs'])->name('payment-paytabs');
 
         Route::resource('donors', DonorController::class);
         Route::get('donors/{donor}/access', [DonorController::class, 'access'])->name('donors.access');
