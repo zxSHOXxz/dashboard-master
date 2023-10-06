@@ -96,6 +96,7 @@ Route::prefix('admin')->middleware(['auth:admin,donor', 'ActiveAccount'])->name(
 
         Route::resource('donates', DonateController::class);
         Route::get('index_donates/{donor}', [DonateController::class, 'donorDonates'])->name('donates.index.donor');
+        Route::post('donate_confirm', [DonateController::class, 'donateConfirm'])->name('donates.donate_confirm');
 
 
 

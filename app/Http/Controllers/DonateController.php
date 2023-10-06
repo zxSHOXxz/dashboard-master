@@ -43,16 +43,26 @@ class DonateController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $donate = Donate::create($data);
+        $request->validate([
+            'value' => 'required|numeric|min:5|max:5000',
+            'donor_id' => 'required|exists:donors,id',
+            'program_id' => 'required|exists:programs,id',
+        ]);
+        $donate = Donate::create([
+            'value' => $request->value,
+            'donor_id' => $request->donor_id,
+            'program_id' => $request->program_id,
+        ]);
 
+        $user = Donor::find($request->donor_id);
 
         $dataPay = [
-            'amount' => $donate->value,
-            'user_id' => $donate->donor_id,
-            'user_first_name' => $donate->donor->user->name,
-            'user_email' => $donate->donor->user->email,
-            'user_phone' => $donate->donor->user->phone,
+            'amount' =>  $request->value,
+            'user_id' => $user->id,
+            'user_first_name' => $user->user->name,
+            'user_email' => $user->user->email,
+            'user_phone' => $user->user->phone,
+            'donate_id' => $donate->id,
         ];
 
         return redirect()->route('admin.payment-paytabs', $dataPay);

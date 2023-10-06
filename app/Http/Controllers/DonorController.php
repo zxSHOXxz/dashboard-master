@@ -39,7 +39,7 @@ class DonorController extends Controller
                 });
             }
         })
-            ->with(['roles', 'user' => function ($query) {
+            ->with(['roles', 'donates', 'user' => function ($query) {
                 $query->withCount(['logs']);
             }])->orderBy('id', 'DESC')
             ->paginate();

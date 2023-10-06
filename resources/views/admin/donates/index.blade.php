@@ -33,6 +33,7 @@
                                 <th>المستخدم</th>
                                 <th>القيمة</th>
                                 <th>البرنامج</th>
+                                <th>حالة الدفع</th>
                                 <th>تحكم</th>
                             </tr>
                         </thead>
@@ -44,6 +45,7 @@
                                             {{ $donate->donor->user->name }} </a></td>
                                     <td>{{ $donate->value }}</td>
                                     <td>{{ $donate->program->name }}</td>
+                                    <td>{{ $donate->status === 1 ? 'مدفوع' : 'غير مدفوع' }}</td>
                                     <td style="width: 360px;">
                                         @can('donates-read')
                                             <a href="{{ route('admin.donates.show', ['donate' => $donate]) }}">

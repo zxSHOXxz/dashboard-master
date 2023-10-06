@@ -46,6 +46,7 @@
                                 <th>نشط</th>
                                 <th>الاسم</th>
                                 <th>البريد</th>
+                                <th>التبرعات</th>
                                 <th>الصلاحيات</th>
                                 @if (auth()->user()->can('traffics-read'))
                                     <th>الترافيك</th>
@@ -61,7 +62,9 @@
                                     <td>{{ \Carbon::parse($donor->last_activity)->diffForHumans() }}</td>
                                     <td>{{ $donor->user->name }}</td>
                                     <td>{{ $donor->email }}</td>
-
+                                    <td> <span class="badge bg-success"> <a class="text-white"
+                                                href="{{ route('admin.donates.index.donor', $donor) }}">{{ count($donor->donates) }}</a>
+                                        </span> </td>
                                     <td>
                                         @foreach ($donor->roles as $role)
                                             {{ $role->display_name }}
